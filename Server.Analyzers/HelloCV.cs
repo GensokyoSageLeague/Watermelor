@@ -37,12 +37,26 @@ namespace WatermelonAna {
 
 			CircleF[] circles = CvInvoke.HoughCircles(hsvIm_Cannized, HoughType.Gradient, 1, 50);
 			Image<Hsv, Byte> hsvIm_Fin = hsvIm.Clone();
+
+			double maxArea = 0;
 			foreach (var circle in circles) {
-				hsvIm_Fin.Draw(circle, new Hsv(0, 240, 200), 4);
+				if (circle.Area > maxArea) {
+					maxArea = circle.Area;
+				}
+			}
+			foreach (var circle in circles) {
+				if (circle.Area == maxArea) {
+					hsvIm_Fin.Draw(circle, new Hsv(0, 240, 200), 4, LineType.Filled);
+				}
 			}
 			ImageViewer imview4 = new ImageViewer(hsvIm_Fin);
 			imview4.Show();
 
+			//Image<Gray, Byte> hsvIm_CH = new Image<Gray, byte>(hsvIm.Size);
+			//Mat mat = new Mat();
+			//CvInvoke.ConvexHull(hsvIm_Colorized, mat);
+			//ImageViewer imview5 = new ImageViewer(hsvIm_CH);
+			//imview5.Show();
 		}
 
 		public static void TestPreprocess() {
